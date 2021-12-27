@@ -26,27 +26,24 @@ object UdpServer {
     }
 
 
-
-
-
-
     private suspend fun startListen() {
+        println("gg")
         while (true) {
-                try {
-                    bufR.clear()
-                    val sourceAddress= channel.receive(bufR) as InetSocketAddress
-                    val bytes=bytebuffer2ByteArray(bufR)
-                   // Log.e("fuck",String(bytes))
-                    //send2Destination(bytes, "192.168.6.102", 8888)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            try {
+                bufR.clear()
+                val sourceAddress = channel.receive(bufR) as InetSocketAddress
+                val bytes = bytebuffer2ByteArray(bufR)
+                println("fuck" + String(bytes) + sourceAddress.address)
+                send2Destination(bytes, NetUtils.ip2String(sourceAddress.address), sourceAddress.port)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     val buf: ByteBuffer = ByteBuffer.allocate(500)
     val bufR: ByteBuffer = ByteBuffer.allocate(500)
-    val mLock= Mutex()
+    val mLock = Mutex()
 
     private suspend fun send2Destination(message: String, ip: String, port: Int) {
         mLock.withLock {
@@ -77,29 +74,28 @@ object UdpServer {
 
     }
 
-    suspend fun broadCastMe(){
-        for(k in 1..254){
-            val fuck= NetSetting.gateX + fillString(k,3)
-            if(fuck!=myIp){
-                send2Destination("fuck me",fuck, localPort)
+    suspend fun broadCastMe() {
+        for (k in 1..254) {
+            val fuck = NetSetting.gateX + fillString(k, 3)
+            if (fuck != myIp) {
+                send2Destination("fuck me", fuck, localPort)
             }
         }
     }
 
-    suspend fun fuckMe(){
-        for(k in 1..254){
-                send2Destination(k.toString(), myIp, localPort)
+    suspend fun fuckMe() {
+        for (k in 1..254) {
+            send2Destination(k.toString(), myIp, localPort)
         }
     }
-
 
 
     fun udpServerStart() {
         System.out.println("fuck")
         initUdp()
         NetUtils.dataScope.launch {
-           // broadCastMe()
-            send2Destination("fuck",gate, localPort)
+            // broadCastMe()
+            send2Destination("fuck", gate, localPort)
 
         }
         NetUtils.dataScope.launch {

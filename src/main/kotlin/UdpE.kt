@@ -1,3 +1,5 @@
+import com.vaca.localudpscan.net.NetSetting
+import kotlinx.coroutines.launch
 import java.awt.Desktop
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -10,10 +12,8 @@ object UdpE {
     @JvmStatic
     fun main(args: Array<String>) {
         println("fuck")
-        System.out.println(Inet4Address.getLocalHost().hostAddress);
-       // System.out.println(Inet4Address.ge);
+        NetSetting.myIp=Inet4Address.getLocalHost().hostAddress
         val process = Runtime.getRuntime().exec("ipconfig")
-
         BufferedReader(
             InputStreamReader(process.inputStream)
         ).use { bufferedReader ->
@@ -22,8 +22,15 @@ object UdpE {
                 if (line.trim { it <= ' ' }.startsWith(DEFAULT_GATEWAY)) {
                     val ipAddress = line.substring(line.indexOf(":") + 1).trim { it <= ' ' }
                     println(ipAddress)
+                    NetSetting.gate=ipAddress
                 }
             }
         }
+        println(NetSetting.myIp)
+        Thread.sleep(1000)
+        NetUtils.dataScope.launch {
+            UdpServer.udpServerStart()
+        }
+        while (true);
     }
 }
