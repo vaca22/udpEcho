@@ -14,7 +14,7 @@ import java.nio.ByteBuffer
 import java.nio.channels.DatagramChannel
 
 object UdpServer {
-    private const val localPort = 13207
+    private const val localPort = 15769
     private lateinit var channel: DatagramChannel
     private fun initUdp() {
         try {
@@ -33,7 +33,7 @@ object UdpServer {
                 bufR.clear()
                 val sourceAddress = channel.receive(bufR) as InetSocketAddress
                 val bytes = bytebuffer2ByteArray(bufR)
-                println("fuck" + String(bytes) + sourceAddress.address)
+              //  println("fuck" + String(bytes) + sourceAddress.address)
                 send2Destination(bytes, NetUtils.ip2String(sourceAddress.address), sourceAddress.port)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -95,7 +95,7 @@ object UdpServer {
         initUdp()
         NetUtils.dataScope.launch {
             // broadCastMe()
-            send2Destination("fuck", gate, localPort)
+            send2Destination("fuck", "114.114.114.114", localPort)
 
         }
         NetUtils.dataScope.launch {

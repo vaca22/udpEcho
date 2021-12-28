@@ -13,8 +13,8 @@ object UdpE {
     fun main(args: Array<String>) {
         println("fuck")
         NetSetting.myIp=Inet4Address.getLocalHost().hostAddress
-        val process = Runtime.getRuntime().exec("ipconfig")
-        BufferedReader(
+        //val process = Runtime.getRuntime().exec("ipconfig")
+       /* BufferedReader(
             InputStreamReader(process.inputStream)
         ).use { bufferedReader ->
             var line: String=""
@@ -25,7 +25,7 @@ object UdpE {
                     NetSetting.gate=ipAddress
                 }
             }
-        }
+        }*/
         println(NetSetting.myIp)
         Thread.sleep(1000)
         NetUtils.dataScope.launch {
